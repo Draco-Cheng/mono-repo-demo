@@ -2,7 +2,7 @@
 
 ## Monorepo Workspace (Nx + TypeScript + Python)
 
-This project is an Nx-managed monorepo supporting both TypeScript/Node.js and Python, suitable for modern full-stack, API, and library development with comprehensive testing setup.
+This project is an Nx-managed monorepo supporting both TypeScript/Node.js and Python. It is designed for modern full-stack, API, and library development with comprehensive testing setup, focusing on AI Agents, MCP (Mission Control Platform), SchadCn, and V0 from Vervel.
 
 ---
 

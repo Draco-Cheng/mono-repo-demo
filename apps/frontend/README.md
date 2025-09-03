@@ -1,6 +1,6 @@
 # Frontend (Next.js) – Nx Monorepo Example
 
-This is the frontend application for the Nx monorepo, built with [Next.js](https://nextjs.org/) and TypeScript. It demonstrates integration with a FastAPI backend and uses modern best practices for monorepo development with comprehensive testing setup.
+This is the frontend application for the Nx monorepo, built with [Next.js](https://nextjs.org/) and TypeScript. It demonstrates integration with a FastAPI backend and uses modern best practices for monorepo development with comprehensive testing setup, supporting AI Agents, MCP, SchadCn, and V0 from Vervel.
 
 ---
 

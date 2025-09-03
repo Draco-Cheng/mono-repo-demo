@@ -1,6 +1,6 @@
 # Backend (FastAPI) – Nx Monorepo Example
 
-This is the backend application for the Nx monorepo, built with [FastAPI](https://fastapi.tiangolo.com/) and Python. It provides a RESTful API that integrates with the Next.js frontend and follows modern Python development best practices.
+This is the backend application for the Nx monorepo, built with [FastAPI](https://fastapi.tiangolo.com/) and Python. It provides a RESTful API that integrates with the Next.js frontend and follows modern Python development best practices, supporting AI Agents, MCP, SchadCn, and V0 from Vervel.
 
 ---
 
