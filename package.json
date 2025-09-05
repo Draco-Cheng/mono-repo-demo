@@ -14,6 +14,7 @@
     "@nx/node": "^21.4.0",
     "@nx/playwright": "^21.4.0",
     "@nx/web": "21.4.0",
+    "@nxlv/python": "^21.2.0",
     "@playwright/test": "^1.36.0",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
