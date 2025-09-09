@@ -1,8 +1,9 @@
-"""Hello unit test module."""
-
-from appp.main import read_file
+from app.main import read_file
 
 
-def test_hello():
+import pytest
+
+@pytest.mark.asyncio
+async def test_hello():
     """Test the hello function."""
-    assert read_file() == "Hello apps/mcp-file-system"
+    assert (await read_file("hello.txt"))['content'] == "Hello World!"
