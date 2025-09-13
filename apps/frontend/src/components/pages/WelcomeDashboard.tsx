@@ -8,7 +8,7 @@ const WelcomeDashboard: React.FC = () => (
   <div className={styles.root}>
     <Card>
       <h1 className={styles.title}>
-        Welcome to the Nx Monorepo Dashboard
+        Welcome to the Nx Monorepo Dashboard!
       </h1>
       <p className={styles.subtitle}>
         This is the main dashboard. Use the navigation or button below to try the backend API demo.
