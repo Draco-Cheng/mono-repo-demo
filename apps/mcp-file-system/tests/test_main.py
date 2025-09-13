@@ -1,7 +1,7 @@
+import pytest
+
 from app.main import read_file
 
-
-import pytest
 
 @pytest.mark.asyncio
 async def test_hello():
