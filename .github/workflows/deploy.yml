@@ -5,6 +5,12 @@ on:
     branches:
       - master
       - main
+    workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual CD run'
 
 jobs:
   deploy:
@@ -28,7 +34,7 @@ jobs:
           AFFECTED_PROJECTS=$(npx nx show projects --affected)
           echo "Affected projects: $AFFECTED_PROJECTS"
           echo "projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
-          
+
       - name: Run lint and build for affected projects
         run: npx nx affected -t lint build
 
