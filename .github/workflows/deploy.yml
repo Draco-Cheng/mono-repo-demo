@@ -22,16 +22,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Determine affected projects
-        run: |
-          npx nx print-affected
+      - name: Show affected projects
+        run: npx nx show projects --affected
 
       - name: Build affected projects
-        run: npx nx affected -t build
+        run: npx nx affected --graph -t build
 
       - name: Build Docker images for affected projects
         run: |
-          AFFECTED_PROJECTS=$(npx nx affected:apps)
+          AFFECTED_PROJECTS=$(npx nx show projects --affected)
           for project in $AFFECTED_PROJECTS; do
             docker build -t ${{ secrets.DOCKER_USERNAME }}/$project:latest -f apps/$project/Dockerfile .
           done
@@ -41,7 +40,7 @@ jobs:
 
       - name: Push affected Docker images
         run: |
-          AFFECTED_PROJECTS=$(npx nx affected:apps)
+          AFFECTED_PROJECTS=$(npx nx show projects --affected)
           for project in $AFFECTED_PROJECTS; do
             docker push ${{ secrets.DOCKER_USERNAME }}/$project:latest
           done
