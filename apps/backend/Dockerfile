@@ -8,8 +8,8 @@ WORKDIR /app
 RUN pip install --upgrade pip setuptools
 
 # Copy pyproject.toml and install dependencies
-COPY pyproject.toml .
-RUN pip install fastapi uvicorn
+COPY pyproject.toml ./
+RUN pip install .
 
 # Copy the rest of the source code
 COPY . .
