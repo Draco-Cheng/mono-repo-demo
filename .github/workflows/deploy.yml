@@ -28,6 +28,7 @@ jobs:
       - name: Build Docker images for affected projects
         run: |
           AFFECTED_PROJECTS=$(npx nx show projects --affected)
+          echo "Affected projects: $AFFECTED_PROJECTS"
           for project in $AFFECTED_PROJECTS; do
             docker build -t ${{ secrets.DOCKER_USERNAME }}/$project:latest -f apps/$project/Dockerfile .
           done
@@ -42,6 +43,7 @@ jobs:
       - name: Push affected Docker images
         run: |
           AFFECTED_PROJECTS=$(npx nx show projects --affected)
+          echo "Pushing Docker images for affected projects: $AFFECTED_PROJECTS"
           for project in $AFFECTED_PROJECTS; do
             docker push ${{ secrets.DOCKER_USERNAME }}/$project:latest
           done
