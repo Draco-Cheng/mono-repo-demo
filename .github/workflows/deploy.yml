@@ -22,15 +22,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run lint and build for affected projects
-        run: npx nx affected -t lint build
-
       - name: Identify affected projects
         id: affected-projects
         run: |
           AFFECTED_PROJECTS=$(npx nx show projects --affected)
           echo "Affected projects: $AFFECTED_PROJECTS"
           echo "projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
+          
+      - name: Run lint and build for affected projects
+        run: npx nx affected -t lint build
 
       - name: Build Docker images for affected projects
         env:
