@@ -37,11 +37,11 @@
       "options": {
         "commands": [
           {
-            "command": "docker build -t $DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME .",
+            "command": "docker build -t \"$DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME\" .",
             "forwardAllArgs": false
           },
           {
-            "command": "docker push $DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME",
+            "command": "docker push \"$DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME\"",
             "forwardAllArgs": false
           }
         ],
