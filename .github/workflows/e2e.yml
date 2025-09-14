@@ -43,9 +43,9 @@ jobs:
       - run: pip install .
         working-directory: apps/backend
 
-      # Build frontend
-      - name: Build frontend
-        run: npx nx build frontend
+      # Build all dependencies
+      - name: Build dependencies
+        run: npx nx build backend frontend
 
       # Start services and run E2E tests
       - name: Run E2E tests
