@@ -48,24 +48,10 @@ jobs:
         run: npx nx build frontend
 
       # Start services and run E2E tests
-      - name: Start backend service
-        run: npx nx serve backend &
-
-      - name: Start frontend service
-        run: npx nx serve frontend &
-
-      # Wait for services to be ready
-      - name: Wait for services
-        run: npx wait-on http://localhost:3000 http://localhost:8000 --timeout 120000
-
-      # Run E2E tests
       - name: Run E2E tests
-        run: npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."
-
-      # Cleanup
-      - name: Stop services
-        if: always()
         run: |
+          npx nx serve backend &
+          npx nx serve frontend &
+          npx wait-on http://localhost:3000 http://localhost:8000 --timeout 120000
+          npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."
           pkill -f "nx serve" || true
-          pkill -f "uvicorn" || true
-          pkill -f "next" || true
