@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - main
-    workflow_dispatch:
+  workflow_dispatch:
     inputs:
       reason:
         description: 'Reason for manual trigger'
