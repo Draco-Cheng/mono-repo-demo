@@ -28,16 +28,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          {
-            "command": "python -m pip install .[test]",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "python -m pytest -v",
-            "forwardAllArgs": false
-          }
-        ],
+        "command": "python -m pip install .[test] && python -m pytest -v",
         "cwd": "apps/backend"
       }
     }
