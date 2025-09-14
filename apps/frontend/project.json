@@ -39,16 +39,7 @@
         "publish": {
             "executor": "nx:run-commands",
             "options": {
-                "commands": [
-                    {
-                        "command": "docker build --target production -t \"$DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME\" .",
-                        "forwardAllArgs": false
-                    },
-                    {
-                        "command": "docker push \"$DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME\"",
-                        "forwardAllArgs": false
-                    }
-                ],
+                "command": "docker build --target production -t \"$DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME\" . && docker push \"$DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME\"",
                 "cwd": "apps/frontend"
             },
             "dependsOn": [
