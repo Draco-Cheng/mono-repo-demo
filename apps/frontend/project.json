@@ -30,6 +30,23 @@
             "options": {
                 "command": "cd apps/frontend && npm run test:coverage"
             }
+        },
+        "publish": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    {
+                        "command": "docker build -t $DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME .",
+                        "forwardAllArgs": false
+                    },
+                    {
+                        "command": "docker push $DOCKER_USERNAME/$REPO_NAME/frontend:$BRANCH_NAME",
+                        "forwardAllArgs": false
+                    }
+                ],
+                "cwd": "apps/frontend"
+            },
+            "dependsOn": ["build"]
         }
     }
 }
