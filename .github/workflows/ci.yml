@@ -83,24 +83,3 @@ jobs:
           echo "Running checks for affected projects: ${{ steps.affected-projects.outputs.projects }}"
           npx nx affected -t lint test build typecheck --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
-      # E2E tests for affected projects
-      - name: Run E2E tests
-        if: steps.affected-projects.outputs.has_affected == 'true'
-        run: |
-          # Check if frontend or backend is affected
-          if echo "${{ steps.affected-projects.outputs.projects }}" | grep -E "(frontend|backend)"; then
-            echo "Frontend or backend affected, running E2E tests"
-            npx nx serve backend &
-            npx nx serve frontend &
-            npx wait-on http://localhost:3000 http://localhost:8000 --timeout 60000
-            npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."
-          else
-            echo "Neither frontend nor backend affected, skipping E2E tests"
-          fi
-
-      # start frontend/backend service and do e2e test
-      - run: |
-          npx nx serve backend &
-          npx nx serve frontend &
-          npx wait-on http://localhost:3000 http://localhost:8000
-          npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."

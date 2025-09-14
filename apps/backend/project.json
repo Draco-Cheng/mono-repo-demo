@@ -30,6 +30,10 @@
       "options": {
         "commands": [
           {
+            "command": "pip install .[test]",
+            "forwardAllArgs": false
+          },
+          {
             "command": "python -m pytest",
             "forwardAllArgs": false
           }
