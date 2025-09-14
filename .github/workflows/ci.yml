@@ -54,7 +54,7 @@ jobs:
           echo "NX_BASE: ${{ env.NX_BASE }}"
           echo "NX_HEAD: ${{ env.NX_HEAD }}"
           echo "Affected projects:"
-          npx nx print-affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       # Identify affected projects
       - name: Identify affected projects
