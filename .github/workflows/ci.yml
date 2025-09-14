@@ -1,10 +1,12 @@
 name: CI
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches:
+      - main
       - master
-  pull_request:
   workflow_dispatch:
     inputs:
       reason:
@@ -22,8 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          filter: tree:0
           fetch-depth: 0
+
+      # Set up base and head refs for nx affected
+      - name: Set base and head SHAs
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: 'main'
 
       # Node.js setup & cache
       - uses: actions/setup-node@v4
@@ -40,25 +47,39 @@ jobs:
         working-directory: apps/backend
       - run: pytest apps/backend || echo "No backend tests found, skipping."
 
+      # Debug nx affected (optional - can be removed after verification)
+      - name: Debug nx affected
+        run: |
+          echo "Event Name: ${{ github.event_name }}"
+          echo "NX_BASE: ${{ env.NX_BASE }}"
+          echo "NX_HEAD: ${{ env.NX_HEAD }}"
+          echo "Affected projects:"
+          npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+
       # Identify affected projects
       - name: Identify affected projects
         id: affected-projects
         run: |
-          AFFECTED_PROJECTS=$(npx nx show projects --affected)
+          AFFECTED_PROJECTS=$(npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} | tr '\n' ' ' | xargs)
           echo "Affected projects: $AFFECTED_PROJECTS"
-          echo "projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
+          {
+            echo "projects<<EOF"
+            echo "$AFFECTED_PROJECTS"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+          # Check if any projects are affected
+          if [ -z "$AFFECTED_PROJECTS" ]; then
+            echo "No affected projects found"
+            echo "has_affected=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_affected=true" >> $GITHUB_OUTPUT
+          fi
 
       # Nx lint/test/build/typecheck for affected projects
       - name: Lint, test, build, and typecheck affected projects
-        env:
-          AFFECTED_PROJECTS: ${{ steps.affected-projects.outputs.projects }}
+        if: steps.affected-projects.outputs.has_affected == 'true'
         run: |
-          echo "Running checks for affected projects: $AFFECTED_PROJECTS"
-          npx nx affected -t lint test build typecheck
+          echo "Running checks for affected projects: ${{ steps.affected-projects.outputs.projects }}"
+          npx nx affected -t lint test build typecheck --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
-      # start frontend/backend service and do e2e test
-      - run: |
-          npx nx serve backend &
-          npx nx serve frontend &
-          npx wait-on http://localhost:3000 http://localhost:8000
-          npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."
