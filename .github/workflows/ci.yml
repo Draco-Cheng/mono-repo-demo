@@ -60,10 +60,14 @@ jobs:
       - name: Identify affected projects
         id: affected-projects
         run: |
-          AFFECTED_PROJECTS=$(npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }})
+          AFFECTED_PROJECTS=$(npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} | tr '\n' ' ' | xargs)
           echo "Affected projects: $AFFECTED_PROJECTS"
-          echo "projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
-          
+          {
+            echo "projects<<EOF"
+            echo "$AFFECTED_PROJECTS"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
           # Check if any projects are affected
           if [ -z "$AFFECTED_PROJECTS" ]; then
             echo "No affected projects found"
