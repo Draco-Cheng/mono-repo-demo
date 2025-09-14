@@ -30,11 +30,11 @@
       "options": {
         "commands": [
           {
-            "command": "pip install .[test]",
+            "command": "../../.venv/Scripts/pip install .[test]",
             "forwardAllArgs": false
           },
           {
-            "command": "python -m pytest",
+            "command": "../../.venv/Scripts/python -m pytest -v",
             "forwardAllArgs": false
           }
         ],
