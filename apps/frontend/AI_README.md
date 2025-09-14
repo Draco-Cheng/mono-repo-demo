@@ -3,6 +3,7 @@
 This file is for AI assistants and future contributors.  
 It describes the architecture, conventions, and best practices for the frontend app.
 
+
 ---
 
 ## Framework & Stack
