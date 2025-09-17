@@ -15,16 +15,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      REPO_NAME: ${{ github.event.repository.name }}
+      BRANCH_NAME: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      # Set up base and head refs for nx affected
-      - name: Set base and head SHAs
-        uses: nrwl/nx-set-shas@v4
-        with:
-          main-branch-name: 'main'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,6 +33,18 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Python and UV setup for backend projects
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - uses: astral-sh/setup-uv@v3
+
+      # Set up base and head refs for nx affected
+      - name: Set base and head SHAs
+        uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: 'main'
 
       - name: Identify affected projects
         run: |
@@ -47,20 +58,9 @@ jobs:
         run: npx nx affected -t lint build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Login to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-      - name: Get branch name
-        id: branch
-        run: echo "branch_name=$(echo '${{ github.ref_name }}' | sed 's/[^a-zA-Z0-9.-]/_/g')" >> $GITHUB_OUTPUT
-
       - name: Publish affected projects
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          REPO_NAME: ${{ github.event.repository.name }}
-          BRANCH_NAME: ${{ steps.branch.outputs.branch_name }}
         run: |
           npx nx affected -t publish --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
