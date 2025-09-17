@@ -44,6 +44,7 @@
     "apps/*"
   ],
   "dependencies": {
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "wait-on": "^8.0.0"
   }
 }
