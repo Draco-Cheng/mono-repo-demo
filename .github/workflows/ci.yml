@@ -45,10 +45,11 @@ jobs:
           echo "Affected projects:"
           npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
           
-      # Python setup for backend projects
+      # Python and UV setup for backend projects
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
+      - uses: astral-sh/setup-uv@v3
 
       # Run all checks for affected projects
       - name: Run CI checks for affected projects
