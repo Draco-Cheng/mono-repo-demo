@@ -5,7 +5,7 @@ FROM node:18-alpine AS base
 WORKDIR /app
 
 # Install dependencies first (for better caching)
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 
 # Copy the rest of the source code

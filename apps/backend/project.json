@@ -30,7 +30,7 @@
     "publish": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker build -t \"$DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME\" . && docker push \"$DOCKER_USERNAME/$REPO_NAME/backend:$BRANCH_NAME\"",
+        "command": "docker build -t \"$DOCKER_USERNAME/${REPO_NAME}_backend:$BRANCH_NAME\" . && docker push \"$DOCKER_USERNAME/${REPO_NAME}_backend:$BRANCH_NAME\"",
         "cwd": "apps/backend"
       },
       "dependsOn": ["build"]
