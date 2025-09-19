@@ -55,3 +55,11 @@ jobs:
           npx wait-on http://localhost:3000 http://localhost:8000 --timeout 120000
           npx nx run frontend-e2e:e2e || echo "No e2e tests found, skipping."
           pkill -f "nx serve" || true
+
+      # Trigger deployment if E2E tests pass
+      - name: Trigger deployment
+        if: success()
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: e2e-passed
