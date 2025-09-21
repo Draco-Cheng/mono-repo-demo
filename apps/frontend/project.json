@@ -4,8 +4,12 @@
         "build": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "npm run build",
-                "cwd": "apps/frontend"
+                "commands": [
+                    "rm -rf .next .next-ci node_modules/.cache",
+                    "npm run build"
+                ],
+                "cwd": "apps/frontend",
+                "parallel": false
             }
         },
         "serve": {
