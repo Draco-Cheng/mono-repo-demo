@@ -37,9 +37,9 @@ jobs:
         with:
           python-version: 3.11
 
-      # Install Playwright browsers and dependencies
+      # Install main browsers (Chromium, Firefox, Webkit)
       - name: Install Playwright dependencies
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium firefox webkit --with-deps
 
       # Build dependencies and run all E2E tests
       - name: Build and run all E2E tests
