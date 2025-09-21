@@ -11,6 +11,10 @@ on:
         required: false
         default: 'Manual CD run'
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -94,3 +98,15 @@ jobs:
           else
             echo "No projects to retag"
           fi
+
+      # Create git tag to sync with Docker image versions
+      - name: Create and push version tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          echo "Creating git tag: ${{ env.VERSION }}"
+          git tag -a "${{ env.VERSION }}" -m "Release ${{ env.VERSION }} - Automated deployment"
+          git push origin "${{ env.VERSION }}"
+
+          echo "✅ Git tag ${{ env.VERSION }} created and pushed"
