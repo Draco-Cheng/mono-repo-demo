@@ -13,12 +13,14 @@ export default defineConfig({
     {
       command: 'npx nx serve backend',
       port: 8000,
+      cwd: '../../',
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
     },
     {
       command: 'npx nx serve frontend',
       port: 3000,
+      cwd: '../../',
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
     },
