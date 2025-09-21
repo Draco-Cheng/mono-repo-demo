@@ -12,12 +12,6 @@
         "jestConfig": "apps/agent-core-e2e/jest.config.ts",
         "passWithNoTests": true
       },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "coverage": false
-        }
-      },
       "dependsOn": [
         "@mono-repo-skeleton/agent-core:build"
       ]
