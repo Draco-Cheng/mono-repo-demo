@@ -12,9 +12,7 @@ const nextConfig: NextConfig = {
         destination: `http://${backendHost}:${backendPort}/api/:path*`,
       },
     ];
-  },
-  // Fix intermittent build issues
-  outputFileTracing: true,
+  }
 };
 
 export default nextConfig;
