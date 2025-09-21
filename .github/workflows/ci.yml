@@ -54,9 +54,9 @@ jobs:
           python-version: 3.11
       - uses: astral-sh/setup-uv@v3
 
-      # Install main browsers (Chromium, Firefox, Webkit)
+      # Install main browsers only (no system deps to save time)
       - name: Install Playwright dependencies
-        run: npx playwright install chromium firefox webkit --with-deps
+        run: npx playwright install chromium firefox webkit
 
       # Run all checks for affected projects including E2E
       - name: Run CI checks for affected projects
