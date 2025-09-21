@@ -18,7 +18,7 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      command: 'npx nx build frontend && npx nx serve frontend',
+      command: 'npx nx serve frontend',
       port: 3000,
       cwd: '../../',
       reuseExistingServer: !process.env.CI,

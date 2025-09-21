@@ -3,7 +3,7 @@ import { join } from 'path';
 
 describe('CLI tests', () => {
   it('should print a message', () => {
-    const cliPath = join(process.cwd(), "apps/agent-core/dist");
+    const cliPath = join(process.cwd(), "apps/agent-core/dist/main.js");
 
     const output = execSync(`node ${cliPath}`).toString();
 
