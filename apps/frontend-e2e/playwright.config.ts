@@ -11,14 +11,14 @@ export default defineConfig({
   // Automatically start services before running tests
   webServer: [
     {
-      command: 'npx nx serve backend',
+      command: 'npx nx build backend && npx nx serve backend',
       port: 8000,
       cwd: '../../',
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
     },
     {
-      command: 'npx nx serve frontend',
+      command: 'npx nx build frontend && npx nx serve frontend',
       port: 3000,
       cwd: '../../',
       reuseExistingServer: !process.env.CI,
