@@ -12,7 +12,11 @@ const nextConfig: NextConfig = {
         destination: `http://${backendHost}:${backendPort}/api/:path*`,
       },
     ];
-  }
+  },
+  // Ensure consistent builds
+  generateBuildId: async () => {
+    return process.env.BUILD_ID || 'build-' + Date.now().toString()
+  },
 };
 
 export default nextConfig;
