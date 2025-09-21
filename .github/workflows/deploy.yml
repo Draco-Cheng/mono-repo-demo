@@ -2,7 +2,7 @@ name: CD
 
 on:
   repository_dispatch:
-    types: [e2e-passed]
+    types: [ci-passed]
   workflow_dispatch:
     inputs:
       reason:
