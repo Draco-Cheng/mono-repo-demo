@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Fix intermittent build issues
+  outputFileTracing: true,
 };
 
 export default nextConfig;
