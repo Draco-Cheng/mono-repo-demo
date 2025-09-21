@@ -13,10 +13,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Ensure consistent builds
+  // Ensure consistent builds and fix Next.js 15.4.x nft.json issues
   generateBuildId: async () => {
     return process.env.BUILD_ID || 'build-' + Date.now().toString()
   },
+  // Disable telemetry and problematic optimizations
+  telemetry: false,
+  poweredByHeader: false,
+  // Force clean output
+  cleanDistDir: true,
 };
 
 export default nextConfig;
