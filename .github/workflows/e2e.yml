@@ -36,8 +36,10 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
-      - run: pip install .
-        working-directory: apps/backend
+
+      # Install Playwright browsers and dependencies
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
 
       # Build dependencies and run all E2E tests
       - name: Build and run all E2E tests

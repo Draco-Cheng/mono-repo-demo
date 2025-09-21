@@ -54,6 +54,10 @@ jobs:
           python-version: 3.11
       - uses: astral-sh/setup-uv@v3
 
+      # Install Playwright browsers and dependencies
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
+
       # Run all checks for affected projects including E2E
       - name: Run CI checks for affected projects
         run: |
