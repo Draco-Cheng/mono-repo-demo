@@ -1,8 +1,9 @@
 name: CD
 
 on:
-  repository_dispatch:
-    types: [ci-passed]
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       reason:

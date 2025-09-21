@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
-    branches:
+    branches-ignore:
       - main
   workflow_dispatch:
     inputs:
@@ -62,12 +62,4 @@ jobs:
       - name: Run CI checks for affected projects
         run: |
           npx nx affected -t lint test build typecheck e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
-
-      # Trigger deployment if on main branch and all tests pass
-      - name: Trigger deployment
-        if: github.ref == 'refs/heads/main' && success()
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: ci-passed
 
