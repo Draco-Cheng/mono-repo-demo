@@ -3,6 +3,9 @@ name: CI
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       reason:
@@ -51,8 +54,20 @@ jobs:
           python-version: 3.11
       - uses: astral-sh/setup-uv@v3
 
-      # Run all checks for affected projects
+      # Install main browsers (Chromium, Firefox, Webkit)
+      - name: Install Playwright dependencies
+        run: npx playwright install chromium firefox webkit --with-deps
+
+      # Run all checks for affected projects including E2E
       - name: Run CI checks for affected projects
         run: |
-          npx nx affected -t lint test build typecheck --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          npx nx affected -t lint test build typecheck e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+
+      # Trigger deployment if on main branch and all tests pass
+      - name: Trigger deployment
+        if: github.ref == 'refs/heads/main' && success()
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: ci-passed
 
