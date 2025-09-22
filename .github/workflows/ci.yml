@@ -65,9 +65,12 @@ jobs:
       - name: Check if E2E tests are affected
         id: check-e2e
         run: |
-          if npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} -t e2e --json | jq -e '.length > 0' > /dev/null 2>&1; then
+          E2E_PROJECTS=$(npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} -t e2e)
+          if [ -n "$E2E_PROJECTS" ]; then
+            echo "E2E projects affected: $E2E_PROJECTS"
             echo "e2e-affected=true" >> $GITHUB_OUTPUT
           else
+            echo "No E2E projects affected"
             echo "e2e-affected=false" >> $GITHUB_OUTPUT
           fi
 
