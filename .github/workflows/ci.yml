@@ -56,18 +56,29 @@ jobs:
           python-version: 3.11
       - uses: astral-sh/setup-uv@v3
 
-      # Install main browsers (Chromium, Firefox, Webkit)
-      - name: Install Playwright dependencies
-        run: npx playwright install --with-deps
-
-      # Clean build cache to avoid conflicts after Playwright installation
-      - name: Clean build cache
-        run: |
-          npx nx reset
-          rm -rf apps/frontend/.next
-
-      # Run all checks for affected projects including E2E
+      # Run all checks for affected projects except E2E
       - name: Run CI checks for affected projects
         run: |
-          npx nx affected -t lint test build typecheck e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          npx nx affected -t lint test build typecheck --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+
+      # Check if E2E tests are affected
+      - name: Check if E2E tests are affected
+        id: check-e2e
+        run: |
+          if npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} -t e2e --json | jq -e '.length > 0' > /dev/null 2>&1; then
+            echo "e2e-affected=true" >> $GITHUB_OUTPUT
+          else
+            echo "e2e-affected=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Install Playwright dependencies only if E2E tests are affected
+      - name: Install Playwright dependencies
+        if: steps.check-e2e.outputs.e2e-affected == 'true'
+        run: npx playwright install chromium firefox webkit --with-deps
+
+      # Run E2E tests for affected projects
+      - name: Run E2E tests for affected projects
+        if: steps.check-e2e.outputs.e2e-affected == 'true'
+        run: |
+          npx nx affected -t e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
