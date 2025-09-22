@@ -57,8 +57,14 @@ jobs:
       - uses: astral-sh/setup-uv@v3
 
       # Install main browsers (Chromium, Firefox, Webkit)
-      # - name: Install Playwright dependencies
-      #   run: npx playwright install --with-deps
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
+
+      # Clean build cache to avoid conflicts after Playwright installation
+      - name: Clean build cache
+        run: |
+          npx nx reset
+          rm -rf apps/frontend/.next
 
       # Run all checks for affected projects including E2E
       - name: Run CI checks for affected projects
