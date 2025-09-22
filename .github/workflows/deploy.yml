@@ -1,14 +1,24 @@
 name: CD
 
 on:
-  repository_dispatch:
-    types: [ci-passed]
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       reason:
         description: 'Reason for manual trigger'
         required: false
         default: 'Manual CD run'
+
+permissions:
+  contents: write
+  actions: read
+
+# Ensure only one deployment runs at a time
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -93,3 +103,15 @@ jobs:
           else
             echo "No projects to retag"
           fi
+
+      # Create git tag to sync with Docker image versions
+      - name: Create and push version tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          echo "Creating git tag: ${{ env.VERSION }}"
+          git tag -a "${{ env.VERSION }}" -m "Release ${{ env.VERSION }} - Automated deployment"
+          git push origin "${{ env.VERSION }}"
+
+          echo "✅ Git tag ${{ env.VERSION }} created and pushed"

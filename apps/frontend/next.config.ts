@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
         destination: `http://${backendHost}:${backendPort}/api/:path*`,
       },
     ];
-  }
+  },
 };
 
 export default nextConfig;

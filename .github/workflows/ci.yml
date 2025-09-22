@@ -3,9 +3,6 @@ name: CI
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       reason:
@@ -16,6 +13,11 @@ on:
 permissions:
   actions: read
   contents: read
+
+# Cancel previous runs when new commits are pushed to the same PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   main:
@@ -54,20 +56,32 @@ jobs:
           python-version: 3.11
       - uses: astral-sh/setup-uv@v3
 
-      # Install main browsers (Chromium, Firefox, Webkit)
-      - name: Install Playwright dependencies
-        run: npx playwright install chromium firefox webkit --with-deps
-
-      # Run all checks for affected projects including E2E
+      # Run all checks for affected projects except E2E
       - name: Run CI checks for affected projects
         run: |
-          npx nx affected -t lint test build typecheck e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          npx nx affected -t lint test build typecheck --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
-      # Trigger deployment if on main branch and all tests pass
-      - name: Trigger deployment
-        if: github.ref == 'refs/heads/main' && success()
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: ci-passed
+      # Check if E2E tests are affected
+      - name: Check if E2E tests are affected
+        id: check-e2e
+        run: |
+          E2E_PROJECTS=$(npx nx show projects --affected --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} -t e2e)
+          if [ -n "$E2E_PROJECTS" ]; then
+            echo "E2E projects affected: $E2E_PROJECTS"
+            echo "e2e-affected=true" >> $GITHUB_OUTPUT
+          else
+            echo "No E2E projects affected"
+            echo "e2e-affected=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Install Playwright dependencies only if E2E tests are affected
+      - name: Install Playwright dependencies
+        if: steps.check-e2e.outputs.e2e-affected == 'true'
+        run: npx playwright install chromium firefox webkit --with-deps
+
+      # Run E2E tests for affected projects
+      - name: Run E2E tests for affected projects
+        if: steps.check-e2e.outputs.e2e-affected == 'true'
+        run: |
+          npx nx affected -t e2e --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
