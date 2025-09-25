@@ -1,6 +1,6 @@
 {
   "name": "@mono-repo-skeleton/agent-core",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
