@@ -56,8 +56,14 @@ jobs:
 
       - name: Run nx release to generate version and tag
         run: |
-          # Run nx release to generate version, update package.json, and create git tag
-          npx nx release --yes
+          # Check if any version tags exist, if not use --first-release
+          if ! git tag -l "v*" | head -1; then
+            echo "No version tags found, using --first-release"
+            npx nx release --first-release --yes
+          else
+            echo "Existing version tags found, using normal release"
+            npx nx release --yes
+          fi
 
           # Get the created version from git tags
           VERSION=$(git describe --tags --abbrev=0)
