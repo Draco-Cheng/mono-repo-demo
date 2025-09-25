@@ -56,17 +56,19 @@ jobs:
 
       - name: Run nx release to generate version and tag
         run: |
-          # Check if semantic version tags exist (v1.0.0 format)
-          if ! git tag -l "v[0-9]*.[0-9]*.[0-9]*" | head -1; then
+          # Check if semantic version tags exist (v1.0.0 format, not v2025.09.22-37 format)
+          SEMANTIC_TAGS=$(git tag -l | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | head -1)
+          if [ -z "$SEMANTIC_TAGS" ]; then
             echo "No semantic version tags found, using --first-release"
             echo "y" | npx nx release --first-release
           else
-            echo "Existing semantic version tags found, using normal release"
+            echo "Existing semantic version tags found: $SEMANTIC_TAGS"
+            echo "Using normal release"
             npx nx release --yes
           fi
 
           # Get the created version from git tags (get the latest semantic version)
-          VERSION=$(git tag -l "v[0-9]*.[0-9]*.[0-9]*" --sort=-version:refname | head -1)
+          VERSION=$(git tag -l | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sort -V | tail -1)
           if [ -z "$VERSION" ]; then
             VERSION=$(git describe --tags --abbrev=0)
           fi
