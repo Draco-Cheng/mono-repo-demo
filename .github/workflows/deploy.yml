@@ -54,9 +54,13 @@ jobs:
         with:
           main-branch-name: 'main'
 
-      - name: Generate unified version
+      - name: Run nx release to generate version and tag
         run: |
-          VERSION="v$(date +%Y.%m.%d)-${{ github.run_number }}"
+          # Run nx release to generate version, update package.json, and create git tag
+          npx nx release --yes
+
+          # Get the created version from git tags
+          VERSION=$(git describe --tags --abbrev=0)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Generated version: $VERSION"
 
@@ -104,14 +108,7 @@ jobs:
             echo "No projects to retag"
           fi
 
-      # Create git tag to sync with Docker image versions
-      - name: Create and push version tag
+      # Git tag already created by nx release, just confirm
+      - name: Confirm version tag created
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
-          echo "Creating git tag: ${{ env.VERSION }}"
-          git tag -a "${{ env.VERSION }}" -m "Release ${{ env.VERSION }} - Automated deployment"
-          git push origin "${{ env.VERSION }}"
-
-          echo "✅ Git tag ${{ env.VERSION }} created and pushed"
+          echo "✅ Git tag ${{ env.VERSION }} created by nx release"

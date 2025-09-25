@@ -91,5 +91,15 @@
       "unitTestRunner": "none",
       "e2eTestRunner": "none"
     }
+  },
+  "release": {
+    "projects": ["*"],
+    "version": {
+      "conventionalCommits": true
+    },
+    "git": {
+      "commit": true,
+      "tag": true
+    }
   }
 }
