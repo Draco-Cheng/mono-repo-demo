@@ -34,8 +34,8 @@
       "options": {
         "outputPath": "{projectRoot}/dist",
         "publish": false,
-        "lockedVersions": true,
-        "bundleLocalDependencies": true
+        "lockedVersions": false,
+        "bundleLocalDependencies": false
       },
       "cache": true
     },
