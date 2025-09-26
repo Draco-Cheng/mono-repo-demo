@@ -56,6 +56,10 @@ jobs:
 
       - name: Run nx release to generate version and tag
         run: |
+          # Configure git for nx release
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
           # Create initial semantic version tag if none exists
           SEMANTIC_TAGS=$(git tag -l | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | head -1)
           if [ -z "$SEMANTIC_TAGS" ]; then
@@ -120,4 +124,4 @@ jobs:
       # Git tag already created by nx release, just confirm
       - name: Confirm version tag created
         run: |
-          echo "✅ Git tag ${{ env.VERSION }} created by nx release"
+          echo "✅ Git tag ${{ env.VERSION }} created and committed by nx release"
