@@ -90,10 +90,5 @@
     }
   }
   },
-  "tags": [],
-  "release": {
-    "version": {
-      "versionActions": "@nxlv/python/src/release/version-actions"
-    }
-  }
+  "tags": []
 }
