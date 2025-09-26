@@ -24,9 +24,11 @@ jobs:
             chore
             ci
             build
+            revert
           requireScope: false
           subjectPattern: ^[A-Z].+$ # 首字母大寫
           subjectPatternError: |
             Subject must start with uppercase letter
+          validateSingleCommit: false
           ignoreLabels: |
             ignore-semantic-pull-request
