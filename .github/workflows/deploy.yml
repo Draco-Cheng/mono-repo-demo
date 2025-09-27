@@ -70,7 +70,7 @@ jobs:
           else
             echo "Existing semantic version tags found: $SEMANTIC_TAGS"
             echo "Using nx release for next version"
-            npx nx release --yes
+            npx nx release version --yes
             VERSION=$(git tag -l | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sort -V | tail -1)
           fi
 
